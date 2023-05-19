@@ -767,3 +767,289 @@ public:
         return false;
     }
 };
+
+// 232
+class MyQueue
+{
+public:
+    stack<int> input, output;
+
+    MyQueue()
+    {
+    }
+
+    void push(int x)
+    {
+        input.push(x);
+    }
+
+    int pop()
+    {
+        moveToQueue();
+        int val = output.top();
+        output.pop();
+        return val;
+    }
+
+    int peek()
+    {
+        moveToQueue();
+        return output.top();
+    }
+
+    bool empty()
+    {
+        return input.empty() && output.empty();
+    }
+
+    void moveToQueue()
+    {
+        if (output.empty())
+        {
+            while (!input.empty())
+            {
+                output.push(input.top());
+                input.pop();
+            }
+        }
+    }
+};
+
+// 278
+class Solution
+{
+public:
+    int firstBadVersion(int n)
+    {
+        int left = 0, right = n;
+        while (left < right)
+        {
+            int mid = left + (right - left) / 2;
+            if (isBadVersion(mid))
+                right = mid;
+            else
+                left = mid + 1;
+        }
+        return left;
+    }
+};
+
+// 383
+class Solution
+{
+public:
+    bool canConstruct(string ransomNote, string magazine)
+    {
+        if (magazine.length() < ransomNote.length())
+            return false;
+        int chars[26] = {0}; // the length is fixed, so array is used
+        for (int i = 0; i < magazine.length(); i++)
+        {
+            chars[int(magazine[i]) - int('a')] += 1;
+        }
+        for (int j = 0; j < ransomNote.length(); j++)
+        {
+            if (chars[int(ransomNote[j]) - int('a')] == 0)
+                return false;
+            chars[int(ransomNote[j]) - int('a')] -= 1;
+        }
+        return true;
+    }
+};
+
+class Solution
+{
+public:
+    bool canConstruct(string ransomNote, string magazine)
+    {
+        int m = ransomNote.size();
+        int n = magazine.size();
+        unordered_map<char, int> map;
+        for (char c : magazine)
+        {
+            map[c]++;
+        }
+        for (char c : ransomNote)
+        {
+            map[c]--;
+        }
+        for (auto pair : map)
+        {
+            if (pair.second < 0)
+                return false;
+        }
+        return true;
+    }
+};
+
+// 70
+
+// fastest
+class Solution
+{
+public:
+    int dp(int n, vector<int> *cache)
+    {
+        if (cache->at(n) != -1)
+            return cache->at(n);
+        int res = 0;
+        if (n - 1 > 0)
+            res += dp(n - 1, cache);
+        if (n - 2 > 0)
+            res += dp(n - 2, cache);
+        cache->at(n) = res;
+        return cache->at(n);
+    }
+    int climbStairs(int n)
+    {
+        vector<int> cache(n + 1, -1);
+        if (n >= 1)
+            cache[1] = 1;
+        if (n >= 2)
+            cache[2] = 2;
+        if (n == 1 || n == 2)
+            return cache[n];
+        dp(n, &cache);
+        return cache[n];
+    }
+};
+
+// time: O(n), space: O(n) + O(n)
+class Solution
+{
+public:
+    int dp(int n, vector<int> &cache)
+    {
+        if (n <= 2)
+            return n;
+        if (cache[n] != -1)
+            return cache[n];
+        cache[n] = dp(n - 1, cache) + dp(n - 2, cache);
+        return cache[n];
+    }
+    int climbStairs(int n)
+    {
+        vector<int> cache(n + 1, -1);
+        if (n >= 1)
+            cache[1] = 1;
+        if (n >= 2)
+            cache[2] = 2;
+        if (n == 1 || n == 2)
+            return cache[n];
+        dp(n, cache);
+        return cache[n];
+    }
+};
+
+// time: O(n), space: O(n)
+class Solution
+{
+public:
+    int climbStairs(int n)
+    {
+        if (n <= 2)
+            return n;
+        vector<int> dp(n + 1, 0);
+        dp[1] = 1;
+        dp[2] = 2;
+        for (int i = 3; i <= n; i++)
+            dp[i] = dp[i - 1] + dp[i - 2];
+        return dp[n];
+    }
+};
+
+// fastest
+// time: O(n), space: O(1)
+class Solution
+{
+public:
+    int climbStairs(int n)
+    {
+        if (n <= 2)
+            return n;
+        int one_step = 2;
+        int two_step = 1;
+        int count = 0;
+        for (int i = 3; i <= n; i++)
+        {
+            count = one_step + two_step;
+            two_step = one_step;
+            one_step = count;
+        }
+        return count;
+    }
+};
+
+// 409
+class Solution
+{
+public:
+    int longestPalindrome(string s)
+    {
+        int evens = 0;
+        int haveOdds = 0;
+        unordered_map<char, int> map;
+        for (int i = 0; i < s.length(); i++)
+        {
+            map[s[i]]++;
+        }
+        for (auto pair : map)
+        {
+            evens += 2 * (pair.second / 2);
+            if (pair.second % 2 == 1)
+                haveOdds = 1;
+        }
+        return evens + haveOdds;
+    }
+};
+
+// 206
+class Solution
+{
+public:
+    ListNode *reverseList(ListNode *head)
+    {
+        ListNode *reversed = NULL;
+        ListNode *temp = reversed;
+        while (head != NULL)
+        {
+            reversed = head;
+            head = head->next;
+            reversed->next = temp;
+            temp = reversed;
+        }
+        return reversed;
+    }
+};
+
+class Solution
+{
+public:
+    ListNode *reverseList(ListNode *head)
+    {
+        if (head == NULL || head->next == NULL)
+            return head;
+        ListNode *reversed = reverseList(head->next);
+        head->next->next = head;
+        head->next = NULL;
+        return reversed;
+    }
+};
+
+// 169
+class Solution
+{
+public:
+    int majorityElement(vector<int> &nums)
+    {
+        int ele = nums[0];
+        int count = 0;
+        for (int i = 0; i < nums.size(); i++)
+        {
+            if (count == 0)
+                ele = nums[i]; // all elements offseted, start again from index i
+            count += (ele == nums[i]) ? 1 : -1;
+        }
+        return ele;
+    }
+};
