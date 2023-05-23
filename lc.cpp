@@ -1053,3 +1053,46 @@ public:
         return ele;
     }
 };
+
+// 67
+class Solution
+{
+public:
+    string addBinary(string a, string b)
+    {
+        int m = a.length();
+        int n = b.length();
+        int i = 1, j = 1;
+        int carry = 0;
+        string ans = "";
+        while (i <= m && j <= n)
+        {
+            int sum = carry;
+            sum += a[m - i] - '0';
+            sum += b[n - j] - '0';
+            carry = sum / 2;
+            ans = to_string(sum % 2) + ans;
+            i++;
+            j++;
+        }
+        while (i <= m)
+        {
+            int sum = carry;
+            sum += a[m - i] - '0';
+            carry = sum / 2;
+            ans = to_string(sum % 2) + ans;
+            i++;
+        }
+        while (j <= n)
+        {
+            int sum = carry;
+            sum += b[n - j] - '0';
+            carry = sum / 2;
+            ans = to_string(sum % 2) + ans;
+            j++;
+        }
+        if (carry == 1)
+            ans = "1" + ans;
+        return ans;
+    }
+};
