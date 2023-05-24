@@ -3,6 +3,8 @@
 #include <queue>
 #include <stack>
 #include <unordered_map>
+#include <set>
+#include <map>
 
 using namespace std;
 
@@ -1094,5 +1096,156 @@ public:
         if (carry == 1)
             ans = "1" + ans;
         return ans;
+    }
+};
+
+class Solution
+{
+public:
+    string addBinary(string a, string b)
+    {
+        string ans = "";
+        int i = a.length() - 1;
+        int j = b.length() - 1;
+        int carry = 0;
+        while (i >= 0 || j >= 0 || carry)
+        {
+            if (i >= 0)
+            {
+                carry += a[i--] - '0';
+            }
+            if (j >= 0)
+            {
+                carry += b[j--] - '0';
+            }
+            ans += carry % 2 + '0';
+            carry /= 2;
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+
+// 543
+class Solution
+{
+public:
+    int ans;
+    int searchLongestPath(TreeNode *root)
+    {
+        if (root == NULL)
+            return 0;
+        int leftPath = searchLongestPath(root->left);
+        int rightPath = searchLongestPath(root->right);
+        ans = max(leftPath + rightPath + 1, ans);
+        return max(leftPath, rightPath) + 1;
+    }
+    int diameterOfBinaryTree(TreeNode *root)
+    {
+        searchLongestPath(root);
+        return ans - 1;
+    }
+};
+
+class Solution
+{
+public:
+    int searchLongestPath(TreeNode *root, int &ans)
+    {
+        if (root == NULL)
+            return 0;
+        int leftPath = searchLongestPath(root->left, ans);
+        int rightPath = searchLongestPath(root->right, ans);
+        ans = max(leftPath + rightPath + 1, ans);
+        return max(leftPath, rightPath) + 1;
+    }
+    int diameterOfBinaryTree(TreeNode *root)
+    {
+        int ans = 0; // Have to initialize an int variable to 0, since C++ doesn't automatically set it 0
+        searchLongestPath(root, ans);
+        return ans - 1;
+    }
+};
+
+// 876
+class Solution
+{
+public:
+    ListNode *middleNode(ListNode *head)
+    {
+        ListNode *slow = head;
+        ListNode *fast = head;
+        while (fast != NULL && fast->next != NULL)
+        {
+            fast = fast->next;
+            slow = slow->next;
+            if (fast != NULL)
+            {
+                fast = fast->next;
+            }
+        }
+        return slow;
+    }
+};
+
+// 104
+class Solution
+{
+public:
+    int maxDepth(TreeNode *root)
+    {
+        if (root == NULL)
+            return 0;
+        return max(maxDepth(root->left), maxDepth(root->right)) + 1;
+    }
+};
+
+// 217
+// Set Approach
+// unordered_set?
+class Solution
+{
+public:
+    bool containsDuplicate(vector<int> &nums)
+    {
+        return nums.size() > set<int>(nums.begin(), nums.end()).size();
+    }
+};
+
+// Contains Duplicate
+class Solution
+{
+public:
+    bool containsDuplicate(vector<int> &nums)
+    {
+        map<int, int> mp;
+        for (auto i : nums)
+            mp[i]++;
+        bool flag = false;
+        for (auto i : mp)
+        {
+            if (i.second >= 2)
+                return true;
+        }
+        return flag;
+    }
+};
+
+// Contains Duplicate
+class Solution
+{
+public:
+    bool containsDuplicate(vector<int> &nums)
+    {
+        unordered_map<int, int> mp;
+        for (auto i : nums)
+            mp[i]++;
+        bool flag = false;
+        for (auto i : mp)
+        {
+            if (i.second >= 2)
+                return true;
+        }
+        return flag;
     }
 };
