@@ -1249,3 +1249,108 @@ public:
         return flag;
     }
 };
+
+// meeting rooms
+// Time:  O(nlogn)
+// Space: O(n)
+
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
+class Solution
+{
+public:
+    bool canAttendMeetings(vector<Interval> &intervals)
+    {
+        sort(intervals.begin(), intervals.end(),
+             [](const Interval &x, const Interval &y)
+             { return x.start < y.start; }); // look at sort func details for why use [] and &parameter
+        for (int i = 1; i < intervals.size(); ++i)
+        {
+            if (intervals[i].start < intervals[i - 1].end)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+// sort a vector of structs: https://stackoverflow.com/questions/4892680/sorting-a-vector-of-structs
+// about the square brackets(lambda expressions): https://blogs.embarcadero.com/lambda-expressions-for-beginners/
+
+// 13
+// The key is there are six instances where subtraction is used, and all of them follow a simple rule: first symbol's value is smaller than the second one's value
+class Solution
+{
+public:
+    int romanToInt(string s)
+    {
+        int ans = 0;
+        unordered_map<char, int> symbolValues;
+        symbolValues['I'] = 1;
+        symbolValues['V'] = 5;
+        symbolValues['X'] = 10;
+        symbolValues['L'] = 50;
+        symbolValues['C'] = 100;
+        symbolValues['D'] = 500;
+        symbolValues['M'] = 1000;
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (i + 1 < s.length() && symbolValues[s[i]] < symbolValues[s[i + 1]])
+                ans -= symbolValues[s[i]];
+            else
+                ans += symbolValues[s[i]];
+        }
+        return ans;
+    }
+};
+
+// 844
+class Solution
+{
+public:
+    bool backspaceCompare(string s, string t)
+    {
+        stack<char> s_result;
+        stack<char> t_result;
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (s[i] == '#')
+            {
+                if (!s_result.empty())
+                    s_result.pop();
+            }
+            else
+                s_result.push(s[i]);
+        }
+        for (int i = 0; i < t.length(); i++)
+        {
+            if (t[i] == '#')
+            {
+                if (!t_result.empty())
+                    t_result.pop();
+            }
+            else
+                t_result.push(t[i]);
+        }
+        if (s_result.size() != t_result.size())
+            return false;
+        while (!s_result.empty())
+        {
+            if (s_result.top() != t_result.top())
+                return false;
+            else
+            {
+                s_result.pop();
+                t_result.pop();
+            }
+        }
+        return true;
+    }
+};
