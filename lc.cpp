@@ -1373,3 +1373,160 @@ public:
         return ans;
     }
 };
+
+// O(nlogn): count 1's in binary representation of i
+class Solution
+{
+public:
+    vector<int> countBits(int n)
+    {
+        vector<int> ans;
+
+        // iterating fromt 0 to n
+        for (int i = 0; i <= n; i++)
+        {
+            // sum is initialised as 0
+            int sum = 0;
+            int num = i;
+            // while num not equals zero
+            while (num != 0)
+            {
+                // we have to count 1's in binary representation of i, therefore % 2
+                sum += num % 2;
+                num = num / 2;
+            }
+            // add sum to ans vector
+            ans.push_back(sum);
+        }
+        // return
+        return ans;
+    }
+};
+
+// 100
+class Solution
+{
+public:
+    bool isSameTree(TreeNode *p, TreeNode *q)
+    {
+        if (p == NULL && q == NULL)
+            return true;
+        if (p != NULL && q != NULL && p->val == q->val && isSameTree(p->left, q->left) && isSameTree(p->right, q->right))
+            return true;
+        return false;
+    }
+};
+
+class Solution
+{
+public:
+    bool isSameTree(TreeNode *p, TreeNode *q)
+    {
+        if (p == NULL || q == NULL)
+        {
+            if (p == NULL && q == NULL)
+                return true;
+            return false;
+        }
+        queue<TreeNode *> queue_p;
+        queue_p.push(p);
+        queue<TreeNode *> queue_q;
+        queue_q.push(q);
+        while (!queue_p.empty() && !queue_q.empty())
+        {
+            TreeNode *p_first = queue_p.front();
+            TreeNode *q_first = queue_q.front();
+            queue_p.pop();
+            queue_q.pop();
+            if (p_first->val != q_first->val)
+                return false;
+            if (p_first->left != NULL || q_first->left != NULL)
+            {
+                if (p_first->left != NULL && q_first->left != NULL)
+                {
+                    queue_p.push(p_first->left);
+                    queue_q.push(q_first->left);
+                }
+                else
+                    return false;
+            }
+            if (p_first->right != NULL || q_first->right != NULL)
+            {
+                if (p_first->right != NULL && q_first->right != NULL)
+                {
+                    queue_p.push(p_first->right);
+                    queue_q.push(q_first->right);
+                }
+                else
+                    return false;
+            }
+        }
+        if (queue_p.empty() && queue_q.empty())
+            return true;
+        return false;
+    }
+};
+
+// 191
+// >> in c++: right shift operator, value divided by 2 (floor)
+class Solution
+{
+public:
+    int hammingWeight(uint32_t n)
+    {
+        int ans = 0;
+        while (n != 0)
+        {
+            ans += n % 2;
+            n >>= 1; // or n /= 2
+        }
+        return ans;
+    }
+};
+
+// difference between size_t , unsigned int and Uint32: https://www.reddit.com/r/cpp_questions/comments/jetu17/what_is_difference_between_size_t_unsigned_int/
+
+// 14
+class Solution
+{
+public:
+    string longestCommonPrefix(vector<string> &strs)
+    {
+        if (strs.size() == 0)
+            return "";
+        string ans = strs[0]; // string is immutable
+        for (int i = 0; i < strs.size(); i++)
+        {
+            for (int j = 0; j < ans.length(); j++)
+            {
+                if (ans[j] != strs[i][j])
+                {
+                    ans = ans.substr(0, j);
+                    break;
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+class Solution
+{
+public:
+    string longestCommonPrefix(vector<string> &v)
+    {
+        string ans = "";
+        sort(v.begin(), v.end()); // Sort the input list v lexicographically
+        int n = v.size();
+        string first = v[0], last = v[n - 1];
+        for (int i = 0; i < min(first.size(), last.size()); i++)
+        {
+            if (first[i] != last[i])
+            {
+                return ans;
+            }
+            ans += first[i];
+        }
+        return ans;
+    }
+};
